@@ -25,7 +25,7 @@ class CalendarsController < ApplicationController
     @todays_date = Date.today
     # 例)　今日が2月1日の場合・・・ Date.today.day => 1日
 
-    @week_days = []
+    @week_days = [today.wday]
 
     plans = Plan.where(date: @todays_date..@todays_date + 6)
 
@@ -34,7 +34,13 @@ class CalendarsController < ApplicationController
       plans.each do |plan|
         today_plans.push(plan.plan) if plan.date == @todays_date + x
       end
-      days = { :month => (@todays_date + x).month, :date => (@todays_date+x).day, :plans => today_plans}
+
+      wday_num = wdays[]
+      if wday_num =< 7
+        wday_num = wday_num -7
+      end
+
+      days = { :month => (@todays_date + x).month, :date => @todays_date.day + x, :plans => today_plans, wday => @week_days + x}
       @week_days.push(days)
     end
 
